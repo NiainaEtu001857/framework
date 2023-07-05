@@ -45,7 +45,7 @@ public class FontServlet extends HttpServlet {
             // -------------------------vue-------------------------------------
 
             String[] urls = utilitaire.getUrl();
-            out.println("Voici l' url : " + url + "<br>");
+            out.println("Voici l' url : " + url + "<br>"); 
             out.print(valiny + "<br>");
 
             // ------------------------mapping-----------------------------------
