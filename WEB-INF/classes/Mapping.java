@@ -1,11 +1,13 @@
 package etu1857.framework;
 
+import java.util.HashMap;
+
 /**
  * Mapping
  */
 public class Mapping {
 
-    String classe, methode;
+    private String classe, methode;
 
     public String getClasse() {
         return classe;

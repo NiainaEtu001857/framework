@@ -5,23 +5,54 @@
  */
 package etu1857.framework.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.Utilities;
+import java.io.*;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.HashMap;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import etu1857.framework.Mapping;
 import traitment.Utilitaire;
-
-/**
- *
- * @author ITU
- */
+/*
 public class FontServlet extends HttpServlet {
 
+    // private void init(HttpServletRequest request, PrintWriter out){
+    //     try {
+
+    //         // get Url 
+
+    //         // StringBuffer url = request.getRequestURL();
+    //         // String queryString = request.getQueryString();
+
+    //         // if (queryString != null) {
+    //         //     url.append("?").append(queryString);
+    //         // }
+
+    //         // String completeUrl = url.toString();
+
+    //         // // -------------------------vue-------------------------------------
+    //         ServletContext context = getServletConfig().getServletContext();
+    //         String Realpath = context.getRealPath("/");
+    //         out.println(Realpath);
+    //         File file = new File(Realpath);
+    //         // utilitaire.ScanPackage(Realpath, file);
+    //         // HashMap<String,Mapping> list = utilitaire.getInstancesWithClass();
+    //         // // Mapping mapping = utilitaire.getMappingWithHashMap(list, Realpath);
+    //         // String annotation = completeUrl.split("ConceptionFramework/")[1].split("/")[0];
+    //         // System.out.println(annotation);
+
+            
+    //     } catch (Exception e) {
+    //         // TODO: handle exception
+    //     }
+    // }
+    
+    private void init( HttpServletResponse response , PrintWriter out)throws ServletException, IOException {
+        String Realpath = context.getRealPath("/");
+        out.println(Realpath);
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,37 +61,13 @@ public class FontServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
-     */
+     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String url = request.getRequestURL().toString();
-            String valiny = request.getPathInfo();
-            // --------------------------classe---------------------------------
-            Utilitaire utilitaire = new Utilitaire(valiny);
-            Mapping mapping = new Mapping();
 
-            // -------------------------vue-------------------------------------
-
-            String[] urls = utilitaire.getUrl();
-            out.println("Voici l' url : " + url + "<br>"); 
-            out.print(valiny + "<br>");
-
-            // ------------------------mapping-----------------------------------
-            out.println("Voici les mapping : <br>");
-            if (urls[1] != null) {
-                mapping.setClasse(urls[1]);
-            }
-            if (urls[2] != null) {
-                mapping.setMethode(urls[2]);
-            }
-            out.print("la Classe : " + mapping.getClasse());
-            out.print("la methode : " + mapping.getMethode());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // RequestDispatcher dispat = request.getRequestDispatcher("index.jsp");
+        // dispat.forward(request,response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
@@ -72,10 +79,12 @@ public class FontServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
-     */
+     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        init(request,out);
         processRequest(request, response);
     }
 
@@ -86,11 +95,82 @@ public class FontServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
-     */
+     
     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        init(request,out);
+        processRequest(request, response);
+    }
+}
+
+ */
+
+//  public class FrontServlet extends HttpServlet{
+
+//     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//             throws ServletException, IOException {
+//         PrintWriter out = response.getWriter();
+//         // init(request,out);
+//         // processRequest(request, response);
+//     }
+
+//     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//             throws ServletException, IOException {
+//         PrintWriter out = response.getWriter();
+//         // init(request,out);
+//         // processRequest(request, response);
+//     }
+// }
+
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+// package etu1857.framework.servlet;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+/**
+ *
+ * @author naval
+ */
+@WebServlet(name = "FrontServlet", urlPatterns = {"/FrontServlet"})
+public class FrontServlet extends HttpServlet {
+
+   
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+           ServletContext context = getServletConfig().getServletContext();
+            String Realpath = context.getRealPath("/");
+            out.println(Realpath);
+        }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
+   
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
 }
