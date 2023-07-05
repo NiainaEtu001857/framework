@@ -10,12 +10,12 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import etu1857.framework.Mapping;
 import traitment.Utilitaire;
-/*
+
 public class FontServlet extends HttpServlet {
 
     // private void init(HttpServletRequest request, PrintWriter out){
@@ -79,13 +79,13 @@ public class FontServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
-     
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         init(request,out);
-        processRequest(request, response);
+        // processRequest(request, response);
     }
 
     /**
@@ -95,82 +95,37 @@ public class FontServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
-     
+    */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         init(request,out);
-        processRequest(request, response);
+        // processRequest(request, response);
     }
 }
+/*
 
- */
+ public class FrontServlet extends HttpServlet{
 
-//  public class FrontServlet extends HttpServlet{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        // init(request,out);
+        // processRequest(request, response);
+    }
 
-//     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//             throws ServletException, IOException {
-//         PrintWriter out = response.getWriter();
-//         // init(request,out);
-//         // processRequest(request, response);
-//     }
-
-//     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//             throws ServletException, IOException {
-//         PrintWriter out = response.getWriter();
-//         // init(request,out);
-//         // processRequest(request, response);
-//     }
-// }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        // init(request,out);
+        // processRequest(request, response);
+    }
+}
 
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-// package etu1857.framework.servlet;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-/**
- *
- * @author naval
- */
-@WebServlet(name = "FrontServlet", urlPatterns = {"/FrontServlet"})
-public class FrontServlet extends HttpServlet {
-
-   
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-           ServletContext context = getServletConfig().getServletContext();
-            String Realpath = context.getRealPath("/");
-            out.println(Realpath);
-        }
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-   
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
-}
+// package etu1857.framework.servlet
