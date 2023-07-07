@@ -1,9 +1,11 @@
-javac -d . DBField.java
-javac -d . DBMethod.java
-javac -d . DBTable.java
-javac  -d . Emp.java
-javac  -d . Dept.java
-javac -d . Mapping.java
-javac -d . Utilitaire.java
-javac -d . FontServlet.java
 
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes"  -d . Parameter.java
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . URLannotation.java
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . Scop.java
+javac -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . FileUpload.java
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . Employer.java
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . Dept.java
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . ModelView.java
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . Mapping.java
+javac   -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . Utilitaire.java
+javac -cp "C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\testeframeWork\WEB-INF\classes" -d . FrontServlet.java

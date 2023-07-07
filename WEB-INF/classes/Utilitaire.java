@@ -3,159 +3,176 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package traitment;
+package utilitaire;
 
-import java.io.File;
-import java.io.ObjectInputStream.GetField;
-import java.lang.ProcessBuilder.Redirect.Type;
-import java.lang.annotation.Annotation;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.lang.reflect.*;
-
-import javax.management.modelmbean.ModelMBean;
-import javax.sound.sampled.BooleanControl;
-import javax.sound.sampled.Line;
-import javax.sql.rowset.BaseRowSet;
-import javax.swing.ListModel;
-
-import org.xml.sax.SAXException;
-
-import annotation.DBField;
-import annotation.DBMethod;
-import annotation.DBParameter;
-import annotation.DBTable;
-import annotation.DBTable;
+import annotation.Scop;
+import annotation.URLannotation;
 import etu1857.framework.Mapping;
-import etu1857.model.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
- * @author ITU
+ * @author Hasinjo
  */
 public class Utilitaire {
-
-    private List<String> listpath = new ArrayList<String>();
-    private List<String> listClass= new ArrayList<String>();
-    private HashMap<String,Class> listClassSinglton =new HashMap<>();
-
-
-//------- PRENDRE LES CHEMEINS ET LES CLASSE DANS LE MODELS------------ 
-
-
-    public HashMap<String, Class> getListClassSinglton() {
-        return listClassSinglton;
+    /****** Sprint 10********/
+    private boolean  cheackannoationScop(Class clazz, String scop){
+        Annotation[] annotations = clazz.getAnnotations();
+        //System.out.println(clazz.toString());
+        for (Annotation annotation1 : annotations) {
+            if( annotation1 instanceof Scop){
+                Scop s = (Scop) annotation1;
+                if(s.scop().equals(scop)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
-
-    public void setListClassSinglton(String keys , Class<?> classe) {
-        this.listClassSinglton.put(keys, classe);
-    }
-
-    public void ScanPackage(String path,File file){
-        try { 
-                File[] listOfFiles = file.listFiles();
-
-                for (File files : listOfFiles) {
-                    if (files.isFile() && files.getName().endsWith(".class")) {
-                        listClass.add(files.getName().split(".class")[0]);
-                        listpath.add(files.getPath().replace("\\", ".").split("WEB-INF.classes.")[1].split(".class")[0]);
-                        // System.out.println(files.getPath().replace("\\", ".").split("WEB-INF.classes.")[1].split(".class")[0]);
-                    } else if (files.isDirectory()) {
-                        if(files.getName().equals("annotation")==false)
-                            ScanPackage(path , files);
+    
+    public HashMap<String , Object> get_class_method(Mapping mapping, HashMap<String, Object> obj_singleton) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+        String clazz = mapping.getClassName();
+        Class c = (Class.forName(clazz));
+        HashMap<String , Object> rep = null;
+        if(cheackannoationScop(c, "singleton")== true){
+            Object obj = obj_singleton.get(clazz);
+            if(obj == null){
+                obj = c.newInstance();
+                obj_singleton.remove(clazz);
+                obj_singleton.put(clazz, obj);
+            }
+            System.out.println("Metyyyy b bbb");
+            rep = get_class_method_singleton(mapping, obj_singleton);
+            rep.put("object", obj);
+            return rep;
+        }
+        Object obj = c.newInstance();
+        rep = get_class_method(mapping);
+        rep.put("object", obj);
+        return rep;
+   }
+    
+    private HashMap<String , Object> get_class_method_singleton(Mapping mapping, HashMap<String, Object> obj_singleton) throws ClassNotFoundException{
+        String clazz = mapping.getClassName();
+        HashMap<String , Object> rep = null;
+        for (Map.Entry<String, Object> dt : obj_singleton.entrySet()) {
+            String key = dt.getKey();
+            if(key.equals(clazz)){
+                rep = new HashMap<>();
+                Class class_utiliser = Class.forName(clazz);
+                rep.put("class", class_utiliser);
+                Method[] liste_method = class_utiliser.getDeclaredMethods();
+                for (Method method : liste_method) {
+                    if(method.getName().equals(mapping.getMethod())){
+                        rep.put("method", method);
+                        break;
                     }
                 }
-        }catch (Exception e) {
-            throw e;
+                return rep;
+            }
         }
+        return  rep;
+    } 
+    /***********************/
+    
+    /*** faire un majiscule d'un mot
+     * @param word
+     * @return  **/
+    public  String capitalize(String word) {
+    if (word == null || word.isEmpty()) {
+        return word;
     }
+    return word.substring(0, 1).toUpperCase() + word.substring(1);
+}
 
-//------ CREER UN INSTANCE DES CLASSES OBTENUES ET VERIFICATION DE L'ANNOTATION , Insertion HashMap --------
-
-    public HashMap<String,Mapping> getInstancesWithClass() {
-        HashMap<String,Mapping> list = new HashMap<String,Mapping>();
-        for (int i = 0; i < listpath.size(); i++) {
-            try {
-                Class<?> myClass = Class.forName(listpath.get(i));
-                Object instance = myClass.newInstance();
-                if(instance.getClass().isAnnotationPresent(DBTable.class)){
-                    Method[] methods = instance.getClass().getDeclaredMethods(); 
-                    for (Method method : methods) {
-                        if(method.isAnnotationPresent(DBMethod.class)==true){
-                            DBMethod nameMethod =  method.getAnnotation(DBMethod.class);
-                            Mapping mapping = new Mapping();
-                            // System.out.println("Methode "+method.getName()+" classe "+instance.getClass().getName());
-                            mapping.setMethode(method.getName());
-                            mapping.setClasse(instance.getClass().getName());
-                            list.put(nameMethod.name(), mapping);
+    /**
+     *
+     * @param request
+     * @return
+     */
+    public String[] splitURL(HttpServletRequest request){
+        String urldefault = request.getPathInfo();
+        String[] taburl = urldefault.split("/");
+        return taburl;
+    }
+    
+    /**
+     *
+     * @param path
+     * @param directori
+     * @param mappingUrls
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public HashMap<String , Mapping> set_allMethodAnnotation( String path, File directori , HashMap<String, Mapping> mappingUrls, HashMap<String, Object> obj_singleton) throws ClassNotFoundException{
+        for (File file_details : directori.listFiles()) {
+            if(file_details.isDirectory() == true){
+                mappingUrls = set_allMethodAnnotation(path, file_details, mappingUrls, obj_singleton);
+            }else{
+                if(file_details.getName().contains(".class")){
+                    String name_class = file_details.toString().split("\\.")[0].replace(path+"WEB-INF\\classes\\" , "").replace("\\" , ".");
+                    Class clazz = Class.forName(name_class);
+                    Method[] List_functions = clazz.getDeclaredMethods() ;
+                    boolean cheak_scoop = cheackannoationScop(clazz, "singleton");
+                    if(cheak_scoop == true){
+                        obj_singleton.put(clazz.toString(), clazz);
+                    }
+                    for (Method method : List_functions) {
+                        if(method.isAnnotationPresent(URLannotation.class)){
+                            URLannotation annotation = method.getAnnotation(URLannotation.class);
+                            mappingUrls.put(annotation.url(), new Mapping(name_class,method.getName()));
                         }
                     }
                 }
-            } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
+            }
+        }
+        return mappingUrls;
+    }
+    
+    
+    /***
+     * chelck Mapping
+     * 
+     * @param liste_mapping
+     * @param request
+     * @return 
+     */
+    public Mapping get_mapping(HashMap<String , Mapping> liste_mapping, HttpServletRequest request) {
+        String[] splits = splitURL(request);
+        String annotation = splits[1];
+        for (Map.Entry<String, Mapping> entry :  liste_mapping.entrySet()) {
+                String key = entry.getKey();
+                if(key.equals(annotation)){
+                    return entry.getValue();
+                }
+        }
+        return null;
+    }
+    
+    /*** appel du class et le method deu fonction
+     * @param mapping
+     * @return 
+     * @throws java.lang.ClassNotFoundException ***/
+    
+    public  HashMap<String , Object> get_class_method(Mapping mapping) throws ClassNotFoundException{
+        HashMap<String , Object> rep = new HashMap<>();
+        Class class_utiliser = Class.forName(mapping.getClassName());
+        rep.put("class", class_utiliser);
+        Method[] liste_method = class_utiliser.getDeclaredMethods();
+        for (Method method : liste_method) {
+            if(method.getName().equals(mapping.getMethod())){
+                rep.put("method", method);
                 break;
             }
         }
-        return list;
-    }
-
-    public Method InvokeFonctionWithParameter(HashMap<String,Mapping> list, String url , Object[] argument){
-        Method model = null;
-        try {
-            if (list.containsKey(url)) {
-                Mapping map = list.get(url);
-                Class<?> myClass = Class.forName(map.getClasse());
-                Object instance = myClass.newInstance();
-                Method[] methods = instance.getClass().getMethods();
-                for (Method method : methods) {
-                    if (method.isAnnotationPresent(DBMethod.class)) {
-                       DBMethod annotation = method.getAnnotation(DBMethod.class);
-                       String annotationValue = annotation.name();
-                        if (annotationValue.equals(url)) {
-                            model = method;
-                        }
-                    }
-                }
-            } else {
-               throw new Exception("Le fonction que vous essaie d' appeller n' existe pas dans les classes avec annotation !");
-            }
-            
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        return model;
-    }
-
-    public static String[] getDBParameterAnnotations(Method method) {
-        String[] annotationNames  = null;
-        if(method.isAnnotationPresent(DBParameter.class)){
-            DBParameter[] annotations = method.getAnnotationsByType(DBParameter.class);
-            annotationNames = new String[annotations.length];
-
-            for (int i = 0; i < annotations.length; i++) {
-                annotationNames[i] = annotations[i].name();
-            }
-        }
-        return annotationNames;
-    }
-
-    //public static HashMap<String , Class> get_Siglton(){}
-
-    // public static void main(String[] args) throws Exception {
-    //     // getContenuSousDossier("C:/ApacheSoftwareFoundation/Tomcat10.0/webapps", "FrameWorkNiaina");
-    //     File f = new File("C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\webapps\\ConceptionFrameWork\\");
-    //     ScanPackage("C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\webapps\\ConceptionFrameWork\\" , f);
-    //     HashMap<String, Mapping> list =  getInstancesWithClass();
-    //     String url = "find-emp";
-    //     String val = "find-all-emp Annotation";
-    //     int id = 14;
-    //     Object[] obj = {"Tonga"};
+        return rep;
+    } 
     
-    //     ModelView valiny = InvokeFonctionWithParameter(list, url,obj);
-    //     System.out.println(valiny);
-    // }
+    
+    
 }

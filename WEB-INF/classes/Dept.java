@@ -1,68 +1,125 @@
-package etu1857.model;
-import java.lang.annotation.*;
-import annotation.*;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package model;
 
-@DBTable(name = "depts")
+import annotation.Parameter;
+import annotation.Scop;
+import annotation.URLannotation;
+import etu1857.framework.FileUpload;
+import etu1857.framework.ModelView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ *
+ * @author Hasinjo
+ */
+@Scop(scop = "singleton")
 public class Dept {
-
-
-    @DBField(name = "id")
-    private Integer id;
-
-    @DBField(name = "name")
-    private String name;
-
-    @DBField(name = "emplacement")
-    private String emplacement;
-
-    @DBField(name = "lieu")
-    private String lieu;
-
-    public Integer getId() {
-        return id;
+    private String namDept;
+    private Integer numero;
+    private FileUpload fileUpload;
+ 
+    @URLannotation(url = "detail-dept")
+    public ModelView detail(@Parameter(name = "id") String testtt, @Parameter(name = "par")String aa){
+        List<Employer> all = new ArrayList<>();
+        Employer p =  new Employer(1, "Hasinjo");
+        all.add(p);
+        p = new Employer(2,aa);
+        all.add(p);
+        ModelView view = new ModelView();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("liste_emp", all);
+        view.setPage("../Dept.jsp");
+        view.setData(data);
+        return view;
+    }
+    
+    @URLannotation(url = "Dept-ajoute")
+    public ModelView ajoutdept(){
+        ModelView view = new ModelView();
+        view.setPage("../Ajoutedept.jsp");
+        return view;
+    }
+ 
+    @URLannotation(url = "Dept-findall")
+    public ModelView findAll(){
+        List<Employer> all = new ArrayList<>();
+       
+        Employer p =  new Employer(1, "Hasinjo");
+        all.add(p);
+        p = new Employer(2,"Toavina");
+        all.add(p);
+        ModelView view = new ModelView();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("liste_emp", all);
+        view.setPage("../Dept.jsp");
+        view.setData(data);
+        return view;
+        
+    }
+    @URLannotation(url = "insert-dept")
+    public ModelView insert_dept() throws Exception{
+        List<Employer> all = new ArrayList<>();
+        Employer p =  new Employer(1, "Hasinjo");
+        all.add(p);
+        p = new Employer(2,this.getNamDept());
+        
+        try {
+            this.getFileUpload().uploadFile("D:\\hasinjo");
+        } catch (Exception e) {
+            throw e;
+        }
+        
+        all.add(p);
+        ModelView view = new ModelView();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("liste_emp", all);
+        view.setPage("../Dept.jsp");
+        view.setData(data);
+        return view;
+    }
+    
+    @URLannotation(url = "AjoutDept")
+    public ModelView affichage_insertDept(){
+        ModelView view = new ModelView();
+        view.setPage("../Ajoutedept.jsp");
+        return view;
+    }
+    
+    
+    
+    
+    public String getNamDept() {
+        return namDept;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setNamDept(String namDept) {
+        this.namDept = namDept;
     }
 
-    public String getName() {
-        return name;
+    public Integer getNumero() {
+        return numero;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumero(String numero) {
+        this.numero = Integer.parseInt(numero);
     }
 
-    public String getEmplacement() {
-        return emplacement;
+    public FileUpload getFileUpload() {
+        return fileUpload;
     }
 
-    public void setEmplacement(String emplacement) {
-        this.emplacement = emplacement;
+    public void setFileUpload(FileUpload fileUpload) throws Exception  {
+        if(fileUpload == null){
+            throw new Exception("Impossible d'enregister ce ficher");
+        }
+        this.fileUpload = fileUpload;
     }
-
-    public String getLieu() {
-        return lieu;
-    }
-
-    public void setLieu(String lieu) {
-        this.lieu = lieu;
-    }
-
-    @DBMethod(name = "calcul-test")
-    public int CalculTest(){
-        return 1+1;
-    }
-
-    @DBMethod(name = "find-all")
-    public int findAll(){
-        return 1+1;
-    }
-
-    @DBMethod(name = "find-where")
-    public int findWhere(){
-        return 1+1;
-    }
-
+    
+    
 }
